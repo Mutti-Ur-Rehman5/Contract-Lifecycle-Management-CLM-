@@ -1,0 +1,64 @@
+:root {
+  --bg-canvas: #F6F5F1;
+  --bg-surface: #FFFFFF;
+  --bg-surface-muted: #EEECE5;
+  --ink-primary: #1B2430;
+  --ink-secondary: #5B6472;
+  --ink-faint: #9AA1AC;
+  --border-hairline: #D9D6CC;
+  --accent-primary: #1F5C4C;
+  --accent-primary-hover: #173F35;
+
+  --stage-draft: #9AA1AC;
+  --stage-internal-review: #7C8BC4;
+  --stage-legal-review: #8A5FBF;
+  --stage-finance-approval: #C68A2E;
+  --stage-executive-approval: #B5543A;
+  --stage-pending-signature: #1F5C4C;
+  --stage-published: #2E7D4F;
+  --stage-archived: #5B6472;
+  --stage-rejected: #B3261E;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-primary);
+  background-color: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+}
