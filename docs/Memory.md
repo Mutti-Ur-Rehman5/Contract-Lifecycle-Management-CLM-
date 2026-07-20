@@ -45,4 +45,39 @@
 
 ---
 
+### 2026-07-20 — Phase 0 Complete: Project Skeleton
+**Phase:** Phase 0 (Project Setup)
+**Did:**
+- Initialized `backend/` with full folder structure per Architecture.md (all models, repositories, services, controllers, routes, middleware, config, events, jobs, sockets, utils)
+- All models defined: Organization, Department, Team, BranchOffice, User, Contract, ContractVersion, ContractTemplate, Clause, WorkflowDefinition, WorkflowInstance, ApprovalStep, Signature, Obligation, Notification, AuditLog
+- Config layer: `db.js` (Mongoose), `redis.js` (ioredis), `s3.js` (AWS SDK v3 / MinIO), `env.js` (centralized env validation)
+- Utility layer: `asyncHandler.js`, `apiResponse.js` (consistent `{ success, data, error }` shape), `logger.js` (pino)
+- Middleware: `auth.middleware.js` (JWT verification), `tenant.middleware.js` (org scoping), `role.middleware.js` (RBAC), `error.middleware.js` (centralized), `validate.middleware.js` (Joi)
+- Event bus: `eventBus.js` (EventEmitter) with listeners for contract approved/signed/expiring
+- BullMQ queues: pdf-generation, notifications, renewal-scan — all with worker placeholders
+- Socket.IO: server in `server.js` with org-scoped rooms, `notification.socket.js` helper
+- Workflow engine: `workflowEngine.service.js` — data-driven advance/getCurrentStage/canUserAct
+- Auth service: `auth.service.js` — register org + admin, login with JWT access+refresh tokens
+- `docker-compose.yml`: mongo:7, redis:7-alpine, minio, backend (Express API), worker (BullMQ), frontend (Vite build via nginx)
+- Frontend `vite.config.js` proxies `/api` to backend for dev
+- Health-check route `GET /api/v1/health` returns `{ success: true, data: { status: 'ok' } }`
+- Frontend `useHealthCheck` hook calls `/api/v1/health` and displays "API Connected" / error state
+- ESLint flat config (no TS), Prettier config, `.gitignore`, `.env.example`
+- Initialized git repo and committed scaffold (109 files)
+**Decisions:**
+- Used `bcryptjs` instead of `bcrypt` to avoid native compilation issues on Windows
+- Used `@aws-sdk/client-s3` (v3) instead of `aws-sdk` v2 as specified in Architecture.md
+- Used Joi for request validation (over express-validator) since it pairs naturally with the existing schema pattern
+- Structured `server.js` as the entry point that bootstraps DB + event listeners + HTTP + Socket.IO
+- Frontend Docker image uses multi-stage build (Vite build → nginx serve) with proxy passthrough for API
+**Bugs / Issues Found & Fixed:**
+- `bcrypt` failed to compile on Windows (missing build tools) — replaced with `bcryptjs` (pure JS)
+- ESLint flat config initially used top-level `await import(...)` which is not supported — switched to static imports
+- `error.middleware.js` referenced `config` without importing it — added import
+- `aws-sdk` v2 is deprecated — switched to `@aws-sdk/client-s3` v3 per Architecture.md
+**Open / Next:**
+- Phase 1: Auth, Organizations & Multi-Tenancy — models already in place, need full CRUD endpoints and frontend auth pages
+
+---
+
 <!-- New entries go above this line, newest first -->
