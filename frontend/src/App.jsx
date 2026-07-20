@@ -1,51 +1,51 @@
-import { Routes, Route } from 'react-router-dom';
-import { useHealthCheck } from './hooks/useHealthCheck.js';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth.js';
+import LoginPage from './pages/auth/LoginPage.jsx';
+import RegisterPage from './pages/auth/RegisterPage.jsx';
+import AppShell from './components/layout/AppShell.jsx';
+import ProtectedRoute from './components/layout/ProtectedRoute.jsx';
+import OrgSettingsPage from './pages/organization/OrgSettingsPage.jsx';
+
+function DashboardPage() {
+  return (
+    <div>
+      <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 20, fontWeight: 600, color: '#1B2430' }}>
+        Welcome to CLM Platform
+      </h2>
+      <p style={{ color: '#5B6472', marginTop: 8 }}>Select a module from the sidebar to get started.</p>
+    </div>
+  );
+}
 
 function App() {
-  const status = useHealthCheck();
-
-  const statusDisplay = {
-    loading: { text: 'Checking API connection...', bg: '#EEECE5' },
-    connected: { text: 'API Connected', bg: '#D4EDDA' },
-    error: { text: 'API Not Connected', bg: '#F8D7DA' },
-  };
-
-  const { text, bg } = statusDisplay[status] || statusDisplay.loading;
+  const { isAuthenticated } = useAuth();
 
   return (
     <Routes>
       <Route
-        path="/"
-        element={
-          <div style={{ fontFamily: 'Inter, sans-serif', padding: '48px', textAlign: 'center' }}>
-            <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: '28px', fontWeight: 600, color: '#1B2430' }}>
-              CLM Platform
-            </h1>
-            <p style={{ color: '#5B6472', marginTop: '8px' }}>Enterprise Contract Lifecycle Management</p>
-            <div
-              id="api-status"
-              style={{
-                marginTop: '24px',
-                padding: '12px 24px',
-                background: bg,
-                borderRadius: '6px',
-                display: 'inline-block',
-                fontWeight: 500,
-              }}
-            >
-              {text}
-            </div>
-          </div>
-        }
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />}
       />
       <Route
-        path="*"
-        element={
-          <div style={{ fontFamily: 'Inter, sans-serif', padding: '48px', textAlign: 'center' }}>
-            <h2 style={{ color: '#1B2430' }}>404 — Page Not Found</h2>
-          </div>
-        }
+        path="/register"
+        element={isAuthenticated ? <Navigate to="/" replace /> : <RegisterPage />}
       />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <AppShell />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardPage />} />
+        <Route path="settings" element={<OrgSettingsPage />} />
+        <Route path="contracts" element={<DashboardPage />} />
+        <Route path="approvals" element={<DashboardPage />} />
+        <Route path="compliance" element={<DashboardPage />} />
+        <Route path="obligations" element={<DashboardPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

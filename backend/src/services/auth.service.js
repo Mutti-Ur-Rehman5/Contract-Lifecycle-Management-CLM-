@@ -1,17 +1,23 @@
-import User from '../models/User.model.js';
 import jwt from 'jsonwebtoken';
 import config from '../config/env.js';
-import bcrypt from 'bcryptjs';
+import userRepository from '../repositories/user.repository.js';
+import organizationRepository from '../repositories/organization.repository.js';
 
 const authService = {
   async registerOrganization(data) {
-    const existing = await User.findOne({ email: data.email });
-    if (existing) throw Object.assign(new Error('Email already registered'), { statusCode: 409 });
+    const existing = await userRepository.findByEmail(data.email);
+    if (existing) {
+      const err = new Error('Email already registered');
+      err.statusCode = 409;
+      throw err;
+    }
 
-    const { Organization } = await import('../models/Organization.model.js');
-    const org = await Organization.create({ name: data.orgName, slug: data.orgSlug });
+    const org = await organizationRepository.create({
+      name: data.orgName,
+      slug: data.orgSlug,
+    });
 
-    const user = await User.create({
+    const user = await userRepository.create({
       organizationId: org._id,
       name: data.name,
       email: data.email,
@@ -19,15 +25,32 @@ const authService = {
       role: 'admin',
     });
 
-    return { organization: org, user: { id: user._id, name: user.name, email: user.email, role: user.role } };
+    return {
+      organization: { id: org._id, name: org.name, slug: org.slug },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+    };
   },
 
   async login(email, password) {
-    const user = await User.findOne({ email }).select('+passwordHash');
-    if (!user) throw Object.assign(new Error('Invalid credentials'), { statusCode: 401 });
+    const user = await userRepository.findByEmailWithPassword(email);
+    if (!user) {
+      const err = new Error('Invalid credentials');
+      err.statusCode = 401;
+      throw err;
+    }
+
+    if (!user.isActive) {
+      const err = new Error('Account is deactivated');
+      err.statusCode = 403;
+      throw err;
+    }
 
     const isMatch = await user.comparePassword(password);
-    if (!isMatch) throw Object.assign(new Error('Invalid credentials'), { statusCode: 401 });
+    if (!isMatch) {
+      const err = new Error('Invalid credentials');
+      err.statusCode = 401;
+      throw err;
+    }
 
     const accessToken = jwt.sign(
       { id: user._id, organizationId: user.organizationId, role: user.role },
@@ -41,7 +64,45 @@ const authService = {
       { expiresIn: config.jwt.refreshExpiresIn }
     );
 
-    return { accessToken, refreshToken, user: { id: user._id, name: user.name, email: user.email, role: user.role } };
+    return {
+      accessToken,
+      refreshToken,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+    };
+  },
+
+  async refreshAccessToken(refreshToken) {
+    try {
+      const decoded = jwt.verify(refreshToken, config.jwt.refreshSecret);
+      const user = await userRepository.findById(decoded.id);
+      if (!user || !user.isActive) {
+        const err = new Error('Invalid refresh token');
+        err.statusCode = 401;
+        throw err;
+      }
+
+      const newAccessToken = jwt.sign(
+        { id: user._id, organizationId: user.organizationId, role: user.role },
+        config.jwt.secret,
+        { expiresIn: config.jwt.expiresIn }
+      );
+
+      return { accessToken: newAccessToken };
+    } catch (error) {
+      const err = new Error('Invalid or expired refresh token');
+      err.statusCode = 401;
+      throw err;
+    }
+  },
+
+  async getMe(userId) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      const err = new Error('User not found');
+      err.statusCode = 404;
+      throw err;
+    }
+    return { id: user._id, name: user.name, email: user.email, role: user.role, organizationId: user.organizationId };
   },
 };
 
