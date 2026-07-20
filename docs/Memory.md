@@ -45,6 +45,40 @@
 
 ---
 
+### 2026-07-20 — Phase 1 Complete: Auth, Organizations & Multi-Tenancy
+**Phase:** Phase 1
+**Did:**
+- Refactored `auth.service.js` to use repository pattern (was calling `User.findOne`/`Organization.create` directly — fixed per Rules.md)
+- Added `POST /api/v1/auth/refresh-token` — issues new access token from valid refresh token
+- Added `GET /api/v1/auth/me` — returns current authenticated user (protected)
+- Created repositories: `organization.repository.js`, `department.repository.js`, `team.repository.js`, `branchOffice.repository.js`
+- Built `organization.service.js` with full CRUD for departments, teams, branch offices — all org-scoped via `organizationId` from JWT
+- Built invite user flow: `POST /api/v1/organizations/users/invite` with role assignment + department assignment
+- Added user management endpoints: list users, update role, toggle active
+- All org-scoped routes use `authMiddleware` + `tenantMiddleware` + `roleMiddleware(['admin'])` for mutating operations; GET routes available to any authenticated org member
+- Frontend: `LoginPage.jsx` — email/password form, loads user into Redux + localStorage, redirects to app shell
+- Frontend: `RegisterPage.jsx` — org name/slug/name/email/password form, auto-generates slug, redirects to login
+- Frontend: `ProtectedRoute.jsx` — redirects unauthenticated users to `/login`
+- Frontend: `AppShell.jsx` — fixed 240px sidebar + 56px navbar layout wrapping `<Outlet />`
+- Frontend: `Sidebar.jsx` — nav links for Contracts, Approvals, Compliance, Obligations, Settings with active states
+- Frontend: `Navbar.jsx` — shows user name/role + sign out button
+- Frontend: `OrgSettingsPage.jsx` — 4-tab page (Departments, Teams, Branch Offices, Users) with full CRUD via React Query mutations
+- Redux store configured with auth reducer; `authSlice.js` handles login/logout/setUser with localStorage persistence
+- `useAuth.js` hook wraps login/register/logout/fetchMe calls for easy consumption
+- All frontend pages styled per Design.md "Ledger" identity: Fraunces headings, Inter body, emerald accent, warm paper bg, hairline borders, consistent spacing
+**Decisions:**
+- GET endpoints for departments/teams/offices/users are unguarded by role (any authenticated org member can view) — only POST/PUT/DELETE require admin role. This lets drafters/reviewers see the org structure without needing admin access.
+- Invite user generates a plain password (not random) for simplicity in Phase 1 — email/password-reset flow deferred to later phase.
+- Added `findByEmailWithPassword` to userRepository (with `.select('+passwordHash')`) to keep password hash hidden by default per security rules, only exposing when explicitly needed.
+**Bugs / Issues Found & Fixed:**
+- `auth.service.js` violated Rules.md by calling mongoose models directly instead of going through repository layer — fixed by routing all queries through `userRepository` and `organizationRepository`.
+- `tenant.middleware.js` was separate from `auth.middleware.js` — they now chain properly: auth verifies JWT → tenant extracts orgId from decoded token.
+- Org route ordering: `POST /users/invite` needed to precede catch-all patterns in route matching — verified route order is correct.
+**Open / Next:**
+- Phase 2: Contract Repository & Contract Builder (TipTap editor, templates, clause library, PDF generation)
+
+---
+
 ### 2026-07-20 — Phase 0 Complete: Project Skeleton
 **Phase:** Phase 0 (Project Setup)
 **Did:**
