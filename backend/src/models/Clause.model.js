@@ -11,8 +11,6 @@ const clauseSchema = new mongoose.Schema(
   { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-clauseSchema.index({ organizationId: 1 });
-
 const Clause = mongoose.model('Clause', clauseSchema);
 
 export default Clause;

@@ -27,7 +27,6 @@
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
   margin-bottom: -1px;
 }
 
@@ -119,6 +118,19 @@
   min-width: 180px;
 }
 
+.template-form {
+  flex-direction: column;
+}
+
+.template-form .form-textarea {
+  width: 100%;
+  min-height: 120px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
 .inline-form-actions {
   display: flex;
   gap: 8px;
@@ -142,7 +154,6 @@
   padding: 28px;
   max-width: 400px;
   width: 100%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .modal-message {
@@ -192,4 +203,16 @@
 .status-badge.inactive {
   background: rgba(154, 161, 172, 0.15);
   color: var(--ink-faint);
+}
+
+.modal-message .delete-warning {
+  display: block;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border: 1px solid rgba(153, 27, 27, 0.2);
+  border-radius: 6px;
+  color: var(--stage-rejected);
+  font-size: 13px;
+  line-height: 1.4;
 }

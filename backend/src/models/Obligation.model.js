@@ -18,7 +18,6 @@ const obligationSchema = new mongoose.Schema(
 );
 
 obligationSchema.index({ organizationId: 1, dueDate: 1 });
-obligationSchema.index({ contractId: 1 });
 
 const Obligation = mongoose.model('Obligation', obligationSchema);
 

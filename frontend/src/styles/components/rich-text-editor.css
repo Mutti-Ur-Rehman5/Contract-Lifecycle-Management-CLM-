@@ -1,0 +1,235 @@
+.rte-wrapper {
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.rte-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-hairline);
+  background: var(--bg-surface);
+  flex-wrap: wrap;
+}
+
+.rte-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.rte-btn:hover {
+  background: var(--bg-surface-muted);
+  color: var(--ink-primary);
+}
+
+.rte-btn.active {
+  background: rgba(31, 92, 76, 0.1);
+  color: var(--accent-primary);
+}
+
+.rte-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.rte-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-hairline);
+  margin: 0 4px;
+}
+
+/* Color picker */
+.rte-color-picker {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-hairline);
+  background: var(--bg-surface);
+}
+
+.rte-color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.1s;
+}
+
+.rte-color-swatch:hover {
+  border-color: var(--ink-secondary);
+}
+
+.rte-color-reset {
+  background: var(--bg-surface-muted);
+  color: var(--ink-secondary);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Link input */
+.rte-link-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-hairline);
+  background: var(--bg-surface);
+}
+
+.rte-link-input .form-input {
+  flex: 1;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--border-hairline);
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--ink-primary);
+  background: #fff;
+}
+
+/* Editor content */
+.rte-content {
+  padding: 40px 72px;
+  min-height: 500px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-primary);
+}
+
+.rte-content .ProseMirror {
+  outline: none;
+  min-height: 500px;
+}
+
+.rte-content .ProseMirror p {
+  margin-bottom: 10px;
+}
+
+.rte-content .ProseMirror h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ink-primary);
+}
+
+.rte-content .ProseMirror h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: var(--ink-primary);
+}
+
+.rte-content .ProseMirror h3 {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.rte-content .ProseMirror ul,
+.rte-content .ProseMirror ol {
+  padding-left: 24px;
+  margin-bottom: 10px;
+}
+
+.rte-content .ProseMirror li {
+  margin-bottom: 4px;
+}
+
+.rte-content .ProseMirror blockquote {
+  border-left: 3px solid var(--accent-primary);
+  padding-left: 16px;
+  margin-left: 0;
+  margin-bottom: 10px;
+  color: var(--ink-secondary);
+  font-style: italic;
+}
+
+.rte-content .ProseMirror hr {
+  border: none;
+  border-top: 1px solid var(--border-hairline);
+  margin: 20px 0;
+}
+
+.rte-content .ProseMirror mark {
+  border-radius: 2px;
+  padding: 1px 2px;
+}
+
+.rte-content .ProseMirror .editor-link {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Tables */
+.rte-content .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  table-layout: fixed;
+}
+
+.rte-content .ProseMirror td,
+.rte-content .ProseMirror th {
+  border: 1px solid var(--border-hairline);
+  padding: 8px 12px;
+  position: relative;
+  vertical-align: top;
+}
+
+.rte-content .ProseMirror th {
+  background: var(--bg-surface);
+  font-weight: 600;
+}
+
+.rte-content .ProseMirror .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(31, 92, 76, 0.08);
+  pointer-events: none;
+}
+
+.rte-content .ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-primary);
+  cursor: col-resize;
+}
+
+.rte-content .ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--ink-faint);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

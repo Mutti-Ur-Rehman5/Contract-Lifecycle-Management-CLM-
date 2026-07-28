@@ -9,8 +9,6 @@ const teamSchema = new mongoose.Schema(
   { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-teamSchema.index({ organizationId: 1 });
-
 const Team = mongoose.model('Team', teamSchema);
 
 export default Team;

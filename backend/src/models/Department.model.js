@@ -9,8 +9,6 @@ const departmentSchema = new mongoose.Schema(
   { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-departmentSchema.index({ organizationId: 1 });
-
 const Department = mongoose.model('Department', departmentSchema);
 
 export default Department;

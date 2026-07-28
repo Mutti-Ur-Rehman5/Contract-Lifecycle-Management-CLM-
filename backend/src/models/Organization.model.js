@@ -10,8 +10,6 @@ const organizationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-organizationSchema.index({ slug: 1 });
-
 const Organization = mongoose.model('Organization', organizationSchema);
 
 export default Organization;

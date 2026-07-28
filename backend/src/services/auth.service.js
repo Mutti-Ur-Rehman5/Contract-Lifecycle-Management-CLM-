@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config/env.js';
 import userRepository from '../repositories/user.repository.js';
 import organizationRepository from '../repositories/organization.repository.js';
+import auditLogService from './auditLog.service.js';
 
 const authService = {
   async registerOrganization(data) {
@@ -23,6 +24,15 @@ const authService = {
       email: data.email,
       passwordHash: data.password,
       role: 'admin',
+    });
+
+    await auditLogService.log({
+      organizationId: org._id,
+      userId: user._id,
+      action: 'auth.register',
+      entityType: 'Organization',
+      entityId: org._id,
+      metadata: { email: data.email, orgName: data.orgName },
     });
 
     return {
@@ -52,6 +62,15 @@ const authService = {
       throw err;
     }
 
+    await auditLogService.log({
+      organizationId: user.organizationId,
+      userId: user._id,
+      action: 'auth.login',
+      entityType: 'User',
+      entityId: user._id,
+      metadata: { email },
+    });
+
     const accessToken = jwt.sign(
       { id: user._id, organizationId: user.organizationId, role: user.role },
       config.jwt.secret,
@@ -67,7 +86,7 @@ const authService = {
     return {
       accessToken,
       refreshToken,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role, profilePicture: user.profilePicture },
     };
   },
 
@@ -102,7 +121,7 @@ const authService = {
       err.statusCode = 404;
       throw err;
     }
-    return { id: user._id, name: user.name, email: user.email, role: user.role, organizationId: user.organizationId };
+    return { id: user._id, name: user.name, email: user.email, role: user.role, organizationId: user.organizationId, profilePicture: user.profilePicture };
   },
 };
 

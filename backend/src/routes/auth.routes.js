@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { register, login, refreshToken, getMe } from '../controllers/auth.controller.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 import validate from '../middleware/validate.middleware.js';
+import { authLimiter } from '../middleware/rateLimit.middleware.js';
 import Joi from 'joi';
 
 const router = Router();
@@ -27,8 +28,8 @@ const refreshSchema = Joi.object({
   refreshToken: Joi.string().required(),
 });
 
-router.post('/register', validate(registerSchema), register);
-router.post('/login', validate(loginSchema), login);
+router.post('/register', authLimiter, validate(registerSchema), register);
+router.post('/login', authLimiter, validate(loginSchema), login);
 router.post('/refresh-token', validate(refreshSchema), refreshToken);
 router.get('/me', authMiddleware, getMe);
 

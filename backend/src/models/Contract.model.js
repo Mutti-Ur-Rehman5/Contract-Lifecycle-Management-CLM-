@@ -35,6 +35,7 @@ const contractSchema = new mongoose.Schema(
         role: { type: String, trim: true },
       },
     ],
+    signatureMode: { type: String, enum: ['sequential', 'parallel'], default: 'sequential' },
     startDate: { type: Date },
     endDate: { type: Date },
   },

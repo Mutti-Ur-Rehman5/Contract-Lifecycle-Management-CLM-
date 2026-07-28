@@ -2,11 +2,14 @@ import userRepository from '../repositories/user.repository.js';
 import departmentRepository from '../repositories/department.repository.js';
 import teamRepository from '../repositories/team.repository.js';
 import branchOfficeRepository from '../repositories/branchOffice.repository.js';
+import auditLogService from './auditLog.service.js';
 
 const organizationService = {
   // --- Departments ---
   async createDepartment(organizationId, data) {
-    return departmentRepository.create({ organizationId, name: data.name, parentDepartmentId: data.parentDepartmentId || null });
+    const dept = await departmentRepository.create({ organizationId, name: data.name, parentDepartmentId: data.parentDepartmentId || null });
+    await auditLogService.log({ organizationId, userId: data.userId, action: 'department.create', entityType: 'Department', entityId: dept._id, metadata: { name: data.name } });
+    return dept;
   },
 
   async listDepartments(organizationId) {
@@ -20,10 +23,12 @@ const organizationService = {
       err.statusCode = 404;
       throw err;
     }
-    return departmentRepository.updateById(id, { name: data.name, parentDepartmentId: data.parentDepartmentId });
+    const updated = await departmentRepository.updateById(id, { name: data.name, parentDepartmentId: data.parentDepartmentId });
+    await auditLogService.log({ organizationId, userId: data.userId, action: 'department.update', entityType: 'Department', entityId: id, metadata: { name: data.name } });
+    return updated;
   },
 
-  async deleteDepartment(id, organizationId) {
+  async deleteDepartment(id, organizationId, userId) {
     const dept = await departmentRepository.findById(id);
     if (!dept || dept.organizationId.toString() !== organizationId) {
       const err = new Error('Department not found');
@@ -37,6 +42,7 @@ const organizationService = {
         throw err;
       }
     });
+    await auditLogService.log({ organizationId, userId, action: 'department.delete', entityType: 'Department', entityId: id, metadata: { name: dept.name } });
     return departmentRepository.deleteById(id);
   },
 
@@ -50,7 +56,9 @@ const organizationService = {
         throw err;
       }
     }
-    return teamRepository.create({ organizationId, name: data.name, departmentId: data.departmentId || null });
+    const team = await teamRepository.create({ organizationId, name: data.name, departmentId: data.departmentId || null });
+    await auditLogService.log({ organizationId, userId: data.userId, action: 'team.create', entityType: 'Team', entityId: team._id, metadata: { name: data.name } });
+    return team;
   },
 
   async listTeams(organizationId, departmentId) {
@@ -80,12 +88,14 @@ const organizationService = {
 
   // --- Branch Offices ---
   async createBranchOffice(organizationId, data) {
-    return branchOfficeRepository.create({
+    const office = await branchOfficeRepository.create({
       organizationId,
       name: data.name,
       address: data.address || '',
       timezone: data.timezone || 'UTC',
     });
+    await auditLogService.log({ organizationId, userId: data.userId, action: 'branch_office.create', entityType: 'BranchOffice', entityId: office._id, metadata: { name: data.name } });
+    return office;
   },
 
   async listBranchOffices(organizationId) {
@@ -121,7 +131,7 @@ const organizationService = {
       throw err;
     }
 
-    return userRepository.create({
+    const user = await userRepository.create({
       organizationId,
       name: data.name,
       email: data.email,
@@ -129,6 +139,9 @@ const organizationService = {
       role: data.role,
       departmentId: data.departmentId || null,
     });
+
+    await auditLogService.log({ organizationId, userId: data.userId, action: 'user.invite', entityType: 'User', entityId: user._id, metadata: { email: data.email, role: data.role } });
+    return user;
   },
 
   async listUsers(organizationId) {

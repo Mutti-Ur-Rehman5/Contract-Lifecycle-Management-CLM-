@@ -1,0 +1,243 @@
+.compliance-page {
+  max-width: 1280px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.summary-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.summary-card--overdue .summary-value {
+  color: var(--stage-rejected);
+}
+
+.summary-card--pending .summary-value {
+  color: var(--stage-finance-approval);
+}
+
+.summary-card--sig .summary-value {
+  color: var(--stage-internal-review);
+}
+
+.summary-label {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.widgets-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.widget {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.widget--risk-breakdown,
+.widget--risk-contracts {
+  grid-column: span 2;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-hairline);
+  background: var(--bg-surface-muted);
+}
+
+.widget-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.widget-badge {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: var(--bg-canvas);
+  color: var(--ink-secondary);
+}
+
+.widget-badge--red {
+  background: #fef2f2;
+  color: var(--stage-rejected);
+}
+
+.widget-body {
+  padding: 8px 0;
+}
+
+.widget-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border-hairline);
+  gap: 12px;
+}
+
+.widget-item:last-child {
+  border-bottom: none;
+}
+
+.widget-item.clickable {
+  cursor: pointer;
+}
+
+.widget-item.clickable:hover {
+  background: var(--bg-surface-muted);
+}
+
+.widget-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.widget-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.widget-item-sub {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  text-transform: capitalize;
+}
+
+.widget-item-date {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.overdue-date {
+  color: var(--stage-rejected);
+  font-weight: 500;
+}
+
+.empty-msg {
+  font-size: 13px;
+  color: var(--ink-faint);
+  font-style: italic;
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.loading-msg {
+  font-size: 14px;
+  color: var(--ink-secondary);
+  padding: 48px 0;
+  text-align: center;
+}
+
+.risk-tag-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.risk-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.risk-bars {
+  padding: 16px 20px;
+}
+
+.risk-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.risk-row:last-child {
+  margin-bottom: 0;
+}
+
+.risk-label {
+  font-size: 13px;
+  color: var(--ink-secondary);
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.risk-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-surface-muted);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.risk-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.risk-bar--high {
+  background: var(--stage-rejected);
+}
+
+.risk-bar--medium {
+  background: var(--stage-finance-approval);
+}
+
+.risk-bar--low {
+  background: var(--stage-published);
+}
+
+.risk-count {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-primary);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '../../hooks/useAuth.js';
 import { orgApi } from '../../features/organization/orgApi.js';
+import { workflowApi } from '../../features/workflows/workflowApi.js';
+import { contractApi } from '../../features/contracts/contractApi.js';
+import WorkflowDefinitionEditor from '../../components/workflow/WorkflowDefinitionEditor.jsx';
 import '../../styles/pages/org-settings.css';
 
 function TabButton({ active, onClick, children }) {
@@ -14,14 +18,14 @@ function TabButton({ active, onClick, children }) {
   );
 }
 
-function ConfirmDialog({ message, onConfirm, onCancel }) {
+function ConfirmDialog({ message, isDanger, onConfirm, onCancel }) {
   return (
     <div className="modal-overlay" onClick={onCancel}>
       <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
-        <p className="modal-message">{message}</p>
+        <p className="modal-message" dangerouslySetInnerHTML={{ __html: message }} />
         <div className="modal-actions">
           <button className="btn btn-secondary" onClick={onCancel}>Cancel</button>
-          <button className="btn btn-danger" onClick={onConfirm}>Delete</button>
+          <button className="btn btn-danger" onClick={onConfirm}>Delete Permanently</button>
         </div>
       </div>
     </div>
@@ -30,29 +34,33 @@ function ConfirmDialog({ message, onConfirm, onCancel }) {
 
 function OrgSettingsPage() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
   const [activeTab, setActiveTab] = useState('departments');
   const [editing, setEditing] = useState(null);
   const [deleting, setDeleting] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showInviteForm, setShowInviteForm] = useState(false);
+  const [showWfEditor, setShowWfEditor] = useState(false);
+  const [wfEditing, setWfEditing] = useState(null);
 
   // Queries
-  const { data: departments } = useQuery({
+  const { data: departments, isLoading: deptsLoading, error: deptsError } = useQuery({
     queryKey: ['departments'],
     queryFn: () => orgApi.getDepartments().then((r) => r.data.data),
   });
 
-  const { data: teams } = useQuery({
+  const { data: teams, isLoading: teamsLoading } = useQuery({
     queryKey: ['teams'],
     queryFn: () => orgApi.getTeams().then((r) => r.data.data),
   });
 
-  const { data: branchOffices } = useQuery({
+  const { data: branchOffices, isLoading: officesLoading } = useQuery({
     queryKey: ['branchOffices'],
     queryFn: () => orgApi.getBranchOffices().then((r) => r.data.data),
   });
 
-  const { data: users } = useQuery({
+  const { data: users, isLoading: usersLoading } = useQuery({
     queryKey: ['orgUsers'],
     queryFn: () => orgApi.getUsers().then((r) => r.data.data),
   });
@@ -99,10 +107,78 @@ function OrgSettingsPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['orgUsers'] }),
   });
 
+  // Workflow Definitions
+  const { data: wfDefinitions } = useQuery({
+    queryKey: ['wfDefinitions'],
+    queryFn: () => workflowApi.getDefinitions().then((r) => r.data.data),
+  });
+
+  const seedWf = useMutation({
+    mutationFn: () => workflowApi.seedDefinitions(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['wfDefinitions'] }),
+  });
+
+  const createWf = useMutation({
+    mutationFn: (data) => workflowApi.createDefinition(data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['wfDefinitions'] }); setShowWfEditor(false); },
+  });
+
+  const updateWf = useMutation({
+    mutationFn: ({ id, data }) => workflowApi.updateDefinition(id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['wfDefinitions'] }); setWfEditing(null); setShowWfEditor(false); },
+  });
+
+  const deleteWf = useMutation({
+    mutationFn: (id) => workflowApi.deleteDefinition(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['wfDefinitions'] }),
+  });
+
+  // Templates
+  const { data: templates } = useQuery({
+    queryKey: ['templates'],
+    queryFn: () => contractApi.getTemplates().then((r) => r.data.data),
+  });
+
+  // Contracts (all for this org)
+  const { data: contractsData } = useQuery({
+    queryKey: ['settingsContracts'],
+    queryFn: () => contractApi.getContracts({ limit: 200 }).then((r) => r.data.data),
+  });
+  const contracts = contractsData?.data || [];
+
+  const createTemplate = useMutation({
+    mutationFn: (data) => contractApi.createTemplate(data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['templates'] }); setShowForm(false); },
+  });
+
+  const updateTemplate = useMutation({
+    mutationFn: ({ id, data }) => contractApi.updateTemplate(id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['templates'] }); setEditing(null); },
+  });
+
+  const deleteTemplate = useMutation({
+    mutationFn: (id) => contractApi.deleteTemplate(id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['templates'] }); setDeleting(null); },
+  });
+
+  const deleteContract = useMutation({
+    mutationFn: (id) => contractApi.deleteContract(id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['settingsContracts'] }); setDeleting(null); },
+  });
+
   return (
     <div className="settings-page">
       <h1 className="settings-title">Organization Settings</h1>
 
+      {!isAdmin && (
+        <div className="settings-panel" style={{ textAlign: 'center', padding: '48px 24px' }}>
+          <p style={{ color: 'var(--ink-secondary)', fontSize: 15 }}>
+            You don't have permission to view this page. Only organization administrators can manage settings.
+          </p>
+        </div>
+      )}
+
+      {isAdmin && (
       <div className="settings-tabs">
         <TabButton active={activeTab === 'departments'} onClick={() => setActiveTab('departments')}>
           Departments
@@ -116,8 +192,19 @@ function OrgSettingsPage() {
         <TabButton active={activeTab === 'users'} onClick={() => setActiveTab('users')}>
           Users
         </TabButton>
+        <TabButton active={activeTab === 'workflows'} onClick={() => setActiveTab('workflows')}>
+          Workflows
+        </TabButton>
+        <TabButton active={activeTab === 'templates'} onClick={() => setActiveTab('templates')}>
+          Templates
+        </TabButton>
+        <TabButton active={activeTab === 'contracts'} onClick={() => setActiveTab('contracts')}>
+          Contracts
+        </TabButton>
       </div>
+      )}
 
+      {isAdmin && (
       <div className="settings-panel">
         {/* --- Departments Tab --- */}
         {activeTab === 'departments' && (
@@ -147,7 +234,13 @@ function OrgSettingsPage() {
                 </tr>
               </thead>
               <tbody>
-                {(departments || []).map((d) => (
+                {deptsLoading && (
+                  <tr><td colSpan={3} className="empty-cell">Loading...</td></tr>
+                )}
+                {deptsError && !deptsLoading && (
+                  <tr><td colSpan={3} className="empty-cell" style={{ color: '#B3261E' }}>Failed to load departments.</td></tr>
+                )}
+                {!deptsLoading && !deptsError && (departments || []).map((d) => (
                   <tr key={d._id}>
                     <td>{d.name}</td>
                     <td>{departments?.find((p) => p._id === d.parentDepartmentId)?.name || '—'}</td>
@@ -190,7 +283,10 @@ function OrgSettingsPage() {
                 </tr>
               </thead>
               <tbody>
-                {(teams || []).map((t) => (
+                {teamsLoading && (
+                  <tr><td colSpan={3} className="empty-cell">Loading...</td></tr>
+                )}
+                {!teamsLoading && (teams || []).map((t) => (
                   <tr key={t._id}>
                     <td>{t.name}</td>
                     <td>{departments?.find((d) => d._id === t.departmentId)?.name || '—'}</td>
@@ -232,7 +328,10 @@ function OrgSettingsPage() {
                 </tr>
               </thead>
               <tbody>
-                {(branchOffices || []).map((o) => (
+                {officesLoading && (
+                  <tr><td colSpan={4} className="empty-cell">Loading...</td></tr>
+                )}
+                {!officesLoading && (branchOffices || []).map((o) => (
                   <tr key={o._id}>
                     <td>{o.name}</td>
                     <td>{o.address || '—'}</td>
@@ -244,6 +343,148 @@ function OrgSettingsPage() {
                 ))}
                 {branchOffices?.length === 0 && (
                   <tr><td colSpan={4} className="empty-cell">No branch offices yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </>
+        )}
+
+        {/* --- Workflow Definitions Tab --- */}
+        {activeTab === 'workflows' && (
+          <>
+            <div className="panel-header">
+              <h2 className="panel-title">Workflow Definitions</h2>
+              <div className="panel-header-actions">
+                <button className="btn btn-secondary btn-sm" onClick={() => seedWf.mutate()} disabled={seedWf.isPending}>
+                  {seedWf.isPending ? 'Seeding...' : 'Seed defaults'}
+                </button>
+                <button className="btn btn-primary btn-sm" onClick={() => { setShowWfEditor(true); setWfEditing(null); }}>
+                  Add definition
+                </button>
+              </div>
+            </div>
+            {showWfEditor && (
+              <WorkflowDefinitionEditor
+                initial={wfEditing}
+                onSubmit={(data) => {
+                  if (wfEditing) updateWf.mutate({ id: wfEditing._id, data });
+                  else createWf.mutate(data);
+                }}
+                onCancel={() => { setShowWfEditor(false); setWfEditing(null); }}
+                error={createWf.error?.response?.data?.error?.message || updateWf.error?.response?.data?.error?.message}
+              />
+            )}
+            <table className="settings-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Contract Type</th>
+                  <th>Stages</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(wfDefinitions || []).map((d) => (
+                  <tr key={d._id}>
+                    <td>{d.name}</td>
+                    <td><span className="role-badge">{d.contractType}</span></td>
+                    <td>{(d.stages || []).length}</td>
+                    <td className="actions-cell">
+                      <button className="btn btn-sm btn-secondary" onClick={() => { setWfEditing(d); setShowWfEditor(true); }}>Edit</button>
+                      <button className="btn btn-sm btn-danger" onClick={() => setDeleting(d)}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+                {wfDefinitions?.length === 0 && (
+                  <tr><td colSpan={4} className="empty-cell">No workflow definitions. Click "Seed defaults" to create them.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </>
+        )}
+        {/* --- Users Tab --- */}
+        {activeTab === 'templates' && (
+          <>
+            <div className="panel-header">
+              <h2 className="panel-title">Contract Templates</h2>
+              <button className="btn btn-primary" onClick={() => { setShowForm(true); setEditing(null); }}>
+                Add template
+              </button>
+            </div>
+            {(showForm || editing) && (
+              <TemplateForm
+                initial={editing}
+                onSubmit={(data) => {
+                  if (editing) updateTemplate.mutate({ id: editing._id, data });
+                  else createTemplate.mutate(data);
+                }}
+                onCancel={() => { setShowForm(false); setEditing(null); }}
+                error={createTemplate.error?.response?.data?.error?.message || updateTemplate.error?.response?.data?.error?.message}
+              />
+            )}
+            <table className="settings-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Contract Type</th>
+                  <th>Variables</th>
+                  <th>Last Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(templates || []).map((t) => (
+                  <tr key={t._id}>
+                    <td>{t.name}</td>
+                    <td><span className="role-badge">{t.contractType}</span></td>
+                    <td>
+                      {(t.contentTemplate || '').match(/\{\{(\w+)\}\}/g)?.map((v) => v.replace(/\{\{|\}\}/g, '')) || '—'}
+                    </td>
+                    <td>{t.createdAt ? new Date(t.createdAt).toLocaleDateString() : '—'}</td>
+                    <td className="actions-cell">
+                      <button className="btn btn-sm btn-secondary" onClick={() => { setEditing(t); setShowForm(true); }}>Edit</button>
+                      <button className="btn btn-sm btn-danger" onClick={() => setDeleting(t)}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+                {templates?.length === 0 && (
+                  <tr><td colSpan={5} className="empty-cell">No templates yet. Add one to start creating contracts from templates.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </>
+        )}
+
+        {/* --- Contracts Tab --- */}
+        {activeTab === 'contracts' && (
+          <>
+            <div className="panel-header">
+              <h2 className="panel-title">All Contracts</h2>
+            </div>
+            <table className="settings-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {contracts.map((c) => (
+                  <tr key={c._id}>
+                    <td>{c.title}</td>
+                    <td><span className="role-badge">{c.type}</span></td>
+                    <td><span className={`status-badge ${c.status === 'published' ? 'active' : ''}`}>{c.status?.replace(/_/g, ' ')}</span></td>
+                    <td>{c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '—'}</td>
+                    <td className="actions-cell">
+                      <button className="btn btn-sm btn-danger" onClick={() => setDeleting({ ...c, _deleteType: 'contract' })}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+                {contracts.length === 0 && (
+                  <tr><td colSpan={5} className="empty-cell">No contracts in this organization yet.</td></tr>
                 )}
               </tbody>
             </table>
@@ -278,7 +519,10 @@ function OrgSettingsPage() {
                 </tr>
               </thead>
               <tbody>
-                {(users || []).map((u) => (
+                {usersLoading && (
+                  <tr><td colSpan={5} className="empty-cell">Loading...</td></tr>
+                )}
+                {!usersLoading && (users || []).map((u) => (
                   <tr key={u._id}>
                     <td>{u.name}</td>
                     <td>{u.email}</td>
@@ -306,15 +550,21 @@ function OrgSettingsPage() {
           </>
         )}
       </div>
+      )}
 
       {/* Delete confirmation modal */}
-      {deleting && (
+      {isAdmin && deleting && (
         <ConfirmDialog
-          message={`Are you sure you want to delete "${deleting.name}"? This cannot be undone.`}
+          message={deleting._deleteType === 'contract'
+            ? `Are you sure you want to permanently delete "<strong>${deleting.title}</strong>"?<span class="delete-warning">This will remove the contract and ALL related data: workflow instances, approval steps, versions, signatures, obligations, notifications, and audit logs. This action is irreversible.</span>`
+            : `Are you sure you want to delete "<strong>${deleting.name || deleting.title}</strong>"? This cannot be undone.`}
           onConfirm={() => {
-            if (activeTab === 'departments') deleteDept.mutate(deleting._id);
+            if (deleting._deleteType === 'contract') deleteContract.mutate(deleting._id);
+            else if (activeTab === 'departments') deleteDept.mutate(deleting._id);
             else if (activeTab === 'teams') deleteTeam.mutate(deleting._id);
             else if (activeTab === 'branchOffices') deleteOffice.mutate(deleting._id);
+            else if (activeTab === 'workflows') deleteWf.mutate(deleting._id);
+            else if (activeTab === 'templates') deleteTemplate.mutate(deleting._id);
           }}
           onCancel={() => setDeleting(null)}
         />
@@ -414,6 +664,44 @@ function InviteUserForm({ departments, onSubmit, onCancel, error }) {
       </select>
       <div className="inline-form-actions">
         <button type="submit" className="btn btn-primary btn-sm">Invite</button>
+        <button type="button" className="btn btn-secondary btn-sm" onClick={onCancel}>Cancel</button>
+      </div>
+    </form>
+  );
+}
+
+function TemplateForm({ initial, onSubmit, onCancel, error }) {
+  const [name, setName] = useState(initial?.name || '');
+  const [contractType, setContractType] = useState(initial?.contractType || 'service');
+  const [contentTemplate, setContentTemplate] = useState(initial?.contentTemplate || '');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({ name, contractType, contentTemplate });
+  };
+
+  return (
+    <form className="inline-form template-form" onSubmit={handleSubmit}>
+      {error && <div className="auth-error">{error}</div>}
+      <input className="form-input" placeholder="Template name" value={name} onChange={(e) => setName(e.target.value)} required autoFocus />
+      <select className="form-input" value={contractType} onChange={(e) => setContractType(e.target.value)}>
+        <option value="employment">Employment</option>
+        <option value="vendor">Vendor</option>
+        <option value="nda">NDA</option>
+        <option value="service">Service</option>
+        <option value="purchase">Purchase</option>
+        <option value="partnership">Partnership</option>
+        <option value="client">Client</option>
+      </select>
+      <textarea
+        className="form-textarea"
+        placeholder="Template content using {{variable_name}} syntax — e.g. {{party_name}}, {{start_date}}, {{end_date}}"
+        value={contentTemplate}
+        onChange={(e) => setContentTemplate(e.target.value)}
+        rows={6}
+      />
+      <div className="inline-form-actions">
+        <button type="submit" className="btn btn-primary btn-sm">{initial ? 'Update' : 'Create'}</button>
         <button type="button" className="btn btn-secondary btn-sm" onClick={onCancel}>Cancel</button>
       </div>
     </form>

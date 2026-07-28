@@ -1,0 +1,145 @@
+.contract-list-page {
+  max-width: 1200px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.filters-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filter-input {
+  flex: 1;
+  padding: 9px 14px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--ink-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  outline: none;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: var(--accent-primary);
+}
+
+.filter-select {
+  padding: 9px 14px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--ink-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  outline: none;
+  min-width: 150px;
+}
+
+.contract-table-wrapper {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.contract-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contract-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ink-secondary);
+  border-bottom: 1px solid var(--border-hairline);
+  background: var(--bg-surface-muted);
+}
+
+.contract-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-hairline);
+  font-size: 14px;
+  color: var(--ink-primary);
+  vertical-align: middle;
+}
+
+.contract-row {
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.contract-row:hover {
+  background: var(--bg-surface-muted);
+}
+
+.contract-row:last-child td {
+  border-bottom: none;
+}
+
+.contract-title-cell {
+  font-weight: 500;
+}
+
+.stage-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.type-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: var(--bg-surface-muted);
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.status-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-draft { color: #9AA1AC; }
+.status-internal_review { color: #7C8BC4; }
+.status-legal_review { color: #8A5FBF; }
+.status-finance_approval { color: #C68A2E; }
+.status-executive_approval { color: #B5543A; }
+.status-pending_signature { color: #1F5C4C; }
+.status-published { color: #2E7D4F; }
+.status-archived { color: #5B6472; }
+.status-rejected { color: #B3261E; }
+
+.date-cell {
+  color: var(--ink-secondary);
+  font-size: 13px;
+}
+
+.empty-cell {
+  color: var(--ink-faint);
+  font-style: italic;
+  padding: 48px 16px !important;
+  text-align: center;
+}

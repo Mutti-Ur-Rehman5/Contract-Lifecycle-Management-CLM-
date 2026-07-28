@@ -1,0 +1,77 @@
+.signature-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signature-status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-hairline);
+  font-size: 13px;
+}
+
+.signature-status-item:last-child {
+  border-bottom: none;
+}
+
+.signature-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.signature-status-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.signature-status-name {
+  font-weight: 500;
+  color: var(--ink-primary);
+  width: 100%;
+}
+
+.signature-status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.signature-status-badge.pending {
+  background: rgba(154, 161, 172, 0.15);
+  color: #5B6472;
+}
+
+.signature-status-badge.signed {
+  background: rgba(46, 125, 79, 0.1);
+  color: #2E7D4F;
+}
+
+.signature-status-badge.declined {
+  background: rgba(179, 38, 30, 0.1);
+  color: #B3261E;
+}
+
+.signature-status-date {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.signature-status-order {
+  font-size: 11px;
+  color: var(--ink-faint);
+  background: var(--bg-surface-muted);
+  padding: 1px 5px;
+  border-radius: 3px;
+}

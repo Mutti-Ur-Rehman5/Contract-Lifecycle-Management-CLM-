@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCredentials, setUser, logout } from '../features/auth/authSlice.js';
 import { authApi } from '../features/auth/authApi.js';
 import { useNavigate } from 'react-router-dom';
+import { updateSocketAuth } from '../lib/socketClient.js';
 
 export function useAuth() {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ export function useAuth() {
   const login = async (email, password) => {
     const { data } = await authApi.login({ email, password });
     dispatch(setCredentials(data.data));
+    updateSocketAuth();
     return data.data;
   };
 

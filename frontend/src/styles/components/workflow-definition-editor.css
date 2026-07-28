@@ -1,0 +1,129 @@
+.wf-def-editor {
+  background: var(--bg-surface-muted);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.wf-def-fields {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.wf-def-field {
+  flex: 1;
+}
+
+.wf-def-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ink-secondary);
+  margin-bottom: 6px;
+}
+
+.wf-def-stages-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.wf-def-stages-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-primary);
+  margin: 0;
+}
+
+.wf-def-stages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.wf-def-stage-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.wf-def-stage-order {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 48px;
+}
+
+.wf-def-stage-num {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  width: 20px;
+  text-align: center;
+}
+
+.wf-def-stage-move {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.wf-def-move-btn {
+  background: none;
+  border: 1px solid var(--border-hairline);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 9px;
+  padding: 1px 4px;
+  line-height: 1;
+  color: var(--ink-secondary);
+}
+
+.wf-def-move-btn:hover:not(:disabled) {
+  background: var(--bg-surface-muted);
+}
+
+.wf-def-move-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.wf-def-stage-inputs {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.wf-def-stage-inputs .form-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.wf-def-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.wf-def-checkbox-label input {
+  margin: 0;
+}
+
+.wf-def-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}

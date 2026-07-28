@@ -15,8 +15,6 @@ const contractTemplateSchema = new mongoose.Schema(
   { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-contractTemplateSchema.index({ organizationId: 1 });
-
 const ContractTemplate = mongoose.model('ContractTemplate', contractTemplateSchema);
 
 export default ContractTemplate;

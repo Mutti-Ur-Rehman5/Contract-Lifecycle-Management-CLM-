@@ -1,0 +1,216 @@
+.obligations-page {
+  max-width: 1200px;
+}
+
+.obligation-stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.stat-card--overdue .stat-value {
+  color: var(--stage-rejected);
+}
+
+.stat-card--completed .stat-value {
+  color: var(--stage-published);
+}
+
+.stat-card--pending .stat-value {
+  color: var(--stage-finance-approval);
+}
+
+.stat-card--upcoming .stat-value {
+  color: var(--stage-internal-review);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.obligation-type-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.due-date {
+  font-size: 13px;
+  color: var(--ink-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.due-date--overdue {
+  color: var(--stage-rejected);
+  font-weight: 500;
+}
+
+.days-label {
+  font-size: 11px;
+  color: var(--ink-secondary);
+}
+
+.due-date--overdue .days-label {
+  color: var(--stage-rejected);
+}
+
+.row-overdue {
+  background: #fef2f2;
+}
+
+.status-pending {
+  color: var(--stage-finance-approval);
+}
+
+.status-completed {
+  color: var(--stage-published);
+}
+
+.status-overdue {
+  color: var(--stage-rejected);
+}
+
+.actions-cell {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.15s ease;
+}
+
+.btn-success {
+  background: var(--accent-primary);
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: var(--accent-primary-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-secondary);
+  border-color: var(--border-hairline);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-surface-muted);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--stage-rejected);
+  border-color: var(--stage-rejected);
+}
+
+.btn-danger:hover {
+  background: #fef2f2;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal-card {
+  background: var(--bg-surface);
+  border-radius: 10px;
+  padding: 28px;
+  max-width: 520px;
+  width: 100%;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink-primary);
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 9px 14px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--ink-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  outline: none;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--accent-primary);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}

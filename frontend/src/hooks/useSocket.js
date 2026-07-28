@@ -1,16 +1,27 @@
 import { useEffect } from 'react';
-import getSocket from '../lib/socketClient.js';
+import getSocket, { updateSocketAuth } from '../lib/socketClient.js';
 
-export function useSocket(organizationId) {
+export function useSocket(userId) {
   useEffect(() => {
-    if (!organizationId) return;
+    if (!userId) return;
 
     const socket = getSocket();
-    socket.connect();
-    socket.emit('join:org', organizationId);
+    updateSocketAuth();
+
+    const onConnect = () => {
+      socket.emit('join:user', userId);
+    };
+
+    socket.on('connect', onConnect);
+
+    if (!socket.connected) {
+      socket.connect();
+    } else {
+      socket.emit('join:user', userId);
+    }
 
     return () => {
-      socket.disconnect();
+      socket.off('connect', onConnect);
     };
-  }, [organizationId]);
+  }, [userId]);
 }

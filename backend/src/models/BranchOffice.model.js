@@ -10,8 +10,6 @@ const branchOfficeSchema = new mongoose.Schema(
   { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-branchOfficeSchema.index({ organizationId: 1 });
-
 const BranchOffice = mongoose.model('BranchOffice', branchOfficeSchema);
 
 export default BranchOffice;

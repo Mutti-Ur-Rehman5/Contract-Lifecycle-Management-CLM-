@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     departmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+    profilePicture: { type: String, default: null },
+    phone: { type: String, default: '' },
+    jobTitle: { type: String, default: '' },
+    timezone: { type: String, default: 'UTC' },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: { createdAt: true, updatedAt: false } }

@@ -16,3 +16,12 @@
   background: var(--bg-canvas);
   overflow-y: auto;
 }
+
+@media (max-width: 768px) {
+  .app-main {
+    margin-left: 0;
+  }
+  .app-content {
+    padding: 16px;
+  }
+}
