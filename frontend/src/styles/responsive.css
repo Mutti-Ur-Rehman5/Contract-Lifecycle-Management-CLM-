@@ -1,0 +1,621 @@
+/* ===========================
+   MOBILE RESPONSIVE OVERRIDES
+   =========================== */
+
+/* ── Breakpoints ──
+   1024px: small laptop / tablet landscape
+    768px: tablet / large phone landscape
+    480px: small phone
+*/
+
+/* ═══════════════════════════
+   GLOBALS & HELPERS
+   ═══════════════════════════ */
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 22px !important;
+  }
+}
+
+/* ═══════════════════════════
+   AUTH PAGES
+   ═══════════════════════════ */
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 28px 20px !important;
+  }
+
+  .auth-title {
+    font-size: 24px !important;
+  }
+
+  .auth-header {
+    margin-bottom: 24px !important;
+  }
+
+  .form-row {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+
+  .otp-input-group {
+    gap: 6px !important;
+  }
+
+  .otp-input {
+    width: 40px !important;
+    height: 48px !important;
+    font-size: 20px !important;
+  }
+}
+
+/* ═══════════════════════════
+   DASHBOARD
+   ═══════════════════════════ */
+
+@media (max-width: 768px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dashboard-greeting {
+    font-size: 24px !important;
+  }
+
+  .dashboard-header {
+    margin-bottom: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-value {
+    font-size: 26px !important;
+  }
+
+  .quick-actions {
+    flex-direction: column !important;
+  }
+
+  .recent-activity {
+    padding: 16px !important;
+  }
+
+  .activity-item {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  .activity-entity,
+  .activity-time {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* ═══════════════════════════
+   CONTRACT LIST
+   ═══════════════════════════ */
+
+@media (max-width: 768px) {
+  .contract-table-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .contract-table {
+    min-width: 650px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .filters-bar {
+    flex-direction: column !important;
+  }
+
+  .filter-select {
+    min-width: 100% !important;
+  }
+
+  .contract-table th,
+  .contract-table td {
+    padding: 8px 10px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* ═══════════════════════════
+   CONTRACT DETAIL
+   ═══════════════════════════ */
+
+@media (max-width: 768px) {
+  .detail-layout {
+    flex-direction: column !important;
+  }
+
+  .detail-sidebar {
+    width: 100% !important;
+    position: static !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .detail-actions {
+    flex-wrap: wrap !important;
+  }
+
+  .detail-title {
+    font-size: 22px !important;
+  }
+
+  .detail-content {
+    padding: 20px 16px !important;
+    min-height: auto !important;
+  }
+
+  .detail-content-display {
+    font-size: 14px !important;
+  }
+}
+
+/* ═══════════════════════════
+   CONTRACT BUILDER
+   ═══════════════════════════ */
+
+@media (max-width: 1024px) {
+  .builder-layout {
+    flex-direction: column !important;
+  }
+
+  .builder-sidebar {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .builder-header {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .builder-actions {
+    flex-wrap: wrap !important;
+  }
+
+  .template-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  }
+
+  .form-actions {
+    flex-direction: column !important;
+  }
+
+  .var-form {
+    max-width: 100% !important;
+  }
+
+  .builder-edit {
+    height: auto !important;
+    min-height: calc(100vh - 200px) !important;
+  }
+}
+
+/* ═══════════════════════════
+   APPROVAL INBOX
+   ═══════════════════════════ */
+
+@media (max-width: 480px) {
+  .approval-card {
+    padding: 12px 14px !important;
+  }
+
+  .approval-card-left {
+    gap: 10px !important;
+  }
+
+  .approval-card-title {
+    font-size: 14px !important;
+  }
+
+  .approval-card-action-hint {
+    opacity: 1 !important;
+    margin-left: 8px !important;
+    font-size: 12px !important;
+  }
+
+  .approval-drawer {
+    max-width: 100vw !important;
+  }
+
+  .approval-drawer-header {
+    padding: 16px 16px 0 !important;
+  }
+
+  .approval-drawer-title {
+    font-size: 18px !important;
+  }
+
+  .approval-drawer-meta {
+    padding: 12px 16px !important;
+  }
+
+  .approval-drawer-meta-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+  }
+
+  .approval-drawer-preview {
+    padding: 12px 16px !important;
+  }
+
+  .approval-drawer-preview-content {
+    padding: 16px !important;
+  }
+
+  .approval-drawer-actions {
+    padding: 12px 16px !important;
+  }
+
+  .approval-drawer-action-btns {
+    flex-direction: column !important;
+  }
+
+  .approval-drawer-view-link {
+    margin: 8px 16px 16px !important;
+    width: calc(100% - 32px) !important;
+  }
+}
+
+/* ═══════════════════════════
+   COMPLIANCE DASHBOARD
+   ═══════════════════════════ */
+
+@media (max-width: 768px) {
+  .widgets-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .widget--risk-breakdown,
+  .widget--risk-contracts {
+    grid-column: span 1 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .widget-body {
+    padding: 4px 0 !important;
+  }
+
+  .widget-item {
+    padding: 8px 14px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .risk-row {
+    flex-wrap: wrap !important;
+  }
+
+  .risk-label {
+    width: 70px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* ═══════════════════════════
+   OBLIGATIONS
+   ═══════════════════════════ */
+
+@media (max-width: 768px) {
+  .obligation-stats-row {
+    flex-wrap: wrap !important;
+  }
+
+  .obligation-stats-row .stat-card {
+    flex: 1 1 calc(50% - 16px) !important;
+    min-width: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .obligation-stats-row .stat-card {
+    flex: 1 1 100% !important;
+  }
+
+  .obligations-page .filters-bar {
+    flex-direction: column !important;
+  }
+
+  .obligations-page .filter-select {
+    min-width: 100% !important;
+  }
+
+  .obligations-page .contract-table-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .obligations-page .contract-table {
+    min-width: 600px !important;
+  }
+
+  .obligations-page .actions-cell {
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .modal-card {
+    padding: 20px !important;
+    margin: 16px !important;
+    max-width: calc(100% - 32px) !important;
+  }
+
+  .modal-actions {
+    flex-direction: column !important;
+  }
+}
+
+/* ═══════════════════════════
+   CHAT PAGE
+   ═══════════════════════════ */
+
+@media (max-width: 768px) {
+  .chat-page {
+    flex-direction: column !important;
+    height: calc(100vh - 100px) !important;
+    position: relative !important;
+  }
+
+  .chat-sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-hairline) !important;
+    display: none !important;
+    flex-direction: column !important;
+    height: 100% !important;
+  }
+
+  .chat-sidebar.chat-sidebar--visible {
+    display: flex !important;
+  }
+
+  .chat-main {
+    display: none !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .chat-main.chat-main--visible {
+    display: flex !important;
+  }
+
+  .chat-messages {
+    padding: 12px !important;
+  }
+
+  .chat-msg {
+    max-width: 85% !important;
+  }
+
+  .chat-input-bar {
+    padding: 8px 12px !important;
+  }
+
+  .chat-sidebar-header {
+    padding: 12px 16px !important;
+  }
+
+  .chat-conv-item {
+    padding: 10px 16px !important;
+  }
+
+  .chat-header {
+    padding: 10px 16px !important;
+  }
+
+  .chat-back-btn {
+    display: flex !important;
+  }
+}
+
+.chat-back-btn {
+  display: none;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  color: var(--ink-primary);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chat-back-btn:hover {
+  background: var(--bg-surface-muted);
+  border-radius: 4px;
+}
+
+/* ═══════════════════════════
+   NOTIFICATION HISTORY
+   ═══════════════════════════ */
+
+@media (max-width: 480px) {
+  .nh-item {
+    padding: 10px 14px !important;
+    gap: 10px !important;
+  }
+
+  .nh-item-header {
+    flex-wrap: wrap !important;
+  }
+
+  .nh-item-title {
+    font-size: 13px !important;
+  }
+
+  .nh-pagination {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* ═══════════════════════════
+   ORGANIZATION SETTINGS
+   ═══════════════════════════ */
+
+@media (max-width: 768px) {
+  .settings-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+  }
+
+  .settings-tab {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-panel {
+    padding: 16px !important;
+  }
+
+  .panel-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .settings-table-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .settings-table {
+    min-width: 500px !important;
+  }
+
+  .inline-form {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .inline-form .form-input {
+    min-width: 0 !important;
+  }
+
+  .inline-form-actions {
+    flex-direction: column !important;
+  }
+}
+
+/* ═══════════════════════════
+   PROFILE PAGE
+   ═══════════════════════════ */
+
+@media (max-width: 480px) {
+  .profile-top-card {
+    padding: 20px !important;
+  }
+
+  .profile-avatar-section {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 12px !important;
+  }
+
+  .profile-avatar-info {
+    align-items: center !important;
+  }
+
+  .profile-avatar-name {
+    font-size: 18px !important;
+  }
+
+  .profile-card {
+    padding: 20px !important;
+  }
+
+  .profile-form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .profile-form-actions {
+    flex-direction: column !important;
+  }
+
+  .profile-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+  }
+
+  .profile-tab {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ═══════════════════════════
+   RICH TEXT EDITOR
+   ═══════════════════════════ */
+
+@media (max-width: 480px) {
+  .rte-content {
+    padding: 20px 16px !important;
+    min-height: 300px !important;
+  }
+
+  .rte-content .ProseMirror {
+    min-height: 300px !important;
+  }
+
+  .rte-toolbar {
+    padding: 4px !important;
+    gap: 1px !important;
+  }
+}
+
+/* ═══════════════════════════
+   SIGNATURE PAD
+   ═══════════════════════════ */
+@media (max-width: 480px) {
+  .signature-pad-actions {
+    flex-direction: column !important;
+  }
+}
+
+/* ═══════════════════════════
+   MODALS (shared)
+   ═══════════════════════════ */
+@media (max-width: 480px) {
+  .modal-card,
+  .modal-dialog {
+    padding: 20px !important;
+    margin: 16px !important;
+    max-width: calc(100% - 32px) !important;
+  }
+}

@@ -50,6 +50,7 @@ function ChatPage() {
   const [inputText, setInputText] = useState('');
   const [showNewChat, setShowNewChat] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showMobileList, setShowMobileList] = useState(true);
   const [typingUsers, setTypingUsers] = useState({});
   const [chatError, setChatError] = useState('');
   const [startChatError, setStartChatError] = useState('');
@@ -261,7 +262,7 @@ function ChatPage() {
 
   return (
     <div className="chat-page">
-      <div className="chat-sidebar">
+      <div className={`chat-sidebar${showMobileList || !activeConvId ? ' chat-sidebar--visible' : ''}`}>
         <div className="chat-sidebar-header">
           <h2 className="chat-sidebar-title">Messages</h2>
           <button
@@ -333,6 +334,7 @@ function ChatPage() {
                   setActiveConvId(conv._id);
                   setShowNewChat(false);
                   setChatError('');
+                  setShowMobileList(false);
                 }}
               >
                 <div className="chat-avatar">
@@ -360,7 +362,7 @@ function ChatPage() {
         </div>
       </div>
 
-      <div className="chat-main">
+      <div className={`chat-main${activeConvId && !showMobileList ? ' chat-main--visible' : ''}`}>
         {!activeConvId ? (
           <div className="chat-placeholder">
             <div className="chat-placeholder-icon">
@@ -374,6 +376,11 @@ function ChatPage() {
         ) : (
           <>
             <div className="chat-header">
+              <button className="chat-back-btn" onClick={() => setShowMobileList(true)} aria-label="Back to conversations">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
               <div className="chat-avatar chat-avatar--sm">
                 {otherUser?.profilePicture ? (
                   <img src={otherUser.profilePicture} alt={otherUser.name} />
