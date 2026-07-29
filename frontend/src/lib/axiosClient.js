@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { updateSocketAuth } from './socketClient.js';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const axiosClient = axios.create({
-  baseURL: '/api/v1',
+  baseURL: `${API_URL}/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -63,7 +65,7 @@ axiosClient.interceptors.response.use(
       const refreshToken = localStorage.getItem('refreshToken');
       if (!refreshToken) throw new Error('No refresh token');
 
-      const { data } = await axios.post('/api/v1/auth/refresh-token', { refreshToken });
+      const { data } = await axios.post(`${API_URL}/api/v1/auth/refresh-token`, { refreshToken });
 
       const newToken = data.data.accessToken;
       localStorage.setItem('accessToken', newToken);
