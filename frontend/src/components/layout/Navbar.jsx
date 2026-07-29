@@ -3,7 +3,7 @@ import { useAuth } from '../../hooks/useAuth.js';
 import NotificationBell from '../notifications/NotificationBell.jsx';
 import '../../styles/layout/navbar.css';
 
-function Navbar() {
+function Navbar({ onToggleSidebar }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -15,6 +15,11 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-left">
+        <button className="navbar-hamburger" onClick={onToggleSidebar} aria-label="Toggle sidebar">
+          <span />
+          <span />
+          <span />
+        </button>
         <span className="navbar-page-title">Dashboard</span>
       </div>
       <div className="navbar-right">

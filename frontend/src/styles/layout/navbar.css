@@ -12,6 +12,34 @@
 .navbar-left {
   display: flex;
   align-items: center;
+  gap: 12px;
+}
+
+.navbar-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.navbar-hamburger span {
+  display: block;
+  height: 2px;
+  background: var(--ink-primary);
+  border-radius: 1px;
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .navbar-hamburger {
+    display: flex;
+  }
 }
 
 .navbar-page-title {
